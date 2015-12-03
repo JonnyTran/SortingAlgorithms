@@ -2,6 +2,7 @@ from datagen import generate_normals, generate_uniforms, generate_exponentials, 
 from sorts import mergesort, quicksort, radixsort, heapsort, insertionsort # all sorts just take an array as their only param
 import time
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def partialsort_experiment(data_size, a=0, b=10):
@@ -14,7 +15,7 @@ def partialsort_experiment(data_size, a=0, b=10):
         # Do tests, save it to a csv or something and we can plot it
     return results
 
-def allsort_experiment_avg_time(sort_algo, data_generator, n_times=10):
+def allsort_experiment_avg_time(sort_algo, data_generator, n_times=1):
     total_time = 0
 
     for i in range(n_times):
@@ -26,30 +27,32 @@ def allsort_experiment_avg_time(sort_algo, data_generator, n_times=10):
 
     return total_time / n_times
 
-def plot_all_sorts_increasing_data(start=100, stop=10000, step=1000):
+def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponents_step=0.1):
     sort_algorithms = [mergesort, quicksort, radixsort, heapsort]
-    x=[]
-    y={}
+
+    x = [int(10**exponent) for exponent in np.arange(exponents_stop, exponents_start, -exponents_step)]
+    y = {}
     for sort_algo in sort_algorithms:
         y[sort_algo.func_name] = []
 
-    for data_size in range(start, stop+step, step):
-        x.append(data_size)
+    print "Running sortings with data sizes:", x
+    for data_size in x:
+        print "Sorting on size:", data_size
         for sort_algo in sort_algorithms:
-            running_time = allsort_experiment_avg_time(sort_algo, lambda: generate_uniforms(data_size, 1, 100))
+            running_time = allsort_experiment_avg_time(sort_algo, lambda: generate_uniforms(data_size, 1, 1000000))
             y[sort_algo.func_name].append(running_time)
 
     for sort_algo in sort_algorithms:
         plt.plot(x, y[sort_algo.func_name], label=sort_algo.func_name)
 
-    plt.title("Different Sorting Algorithms Running Time (averaged over 100) with Increasing Data Size")
+    plt.title("Different Sorting Algorithms Running Time with Increasing Data Size")
     plt.xlabel("Data Size (# of uniform integers)")
     plt.ylabel("Running Time (seconds)")
-    plt.legend()
+    plt.legend(bbox_to_anchor=(0.3, 1))
     plt.show()
 
 if __name__ == '__main__':
     print allsort_experiment_avg_time(radixsort, lambda: generate_uniforms(100, 1, 10))
     print allsort_experiment_avg_time(quicksort, lambda: generate_uniforms(100, 1, 10))
-    plot_all_sorts_increasing_data(start=1000, stop=10000, step=2000)
+    plot_all_sorts_increasing_data()
 
