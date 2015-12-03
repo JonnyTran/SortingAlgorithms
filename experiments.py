@@ -1,6 +1,8 @@
 from datagen import generate_normals, generate_uniforms, generate_exponentials, generate_partialsorts
 from sorts import mergesort, quicksort, radixsort, heapsort, insertionsort # all sorts just take an array as their only param
 import time
+import matplotlib.pyplot as plt
+
 
 def partialsort_experiment(data_size, a=0, b=10):
     data = generate_uniforms(n_uniforms=data_size, a=a, b=b) # Pick different values maybe?
@@ -12,14 +14,45 @@ def partialsort_experiment(data_size, a=0, b=10):
         # Do tests, save it to a csv or something and we can plot it
     return results
 
-def allsort_experiment(data):
-    results = []
-    # run all sorts on data, time them, save as csv or something
-    # run multiple times using different distributions
-    return results
+def allsort_experiment_avg_time(sort_algo, data_generator, n_times=10):
+    total_time = 0
 
-def quicksort_v_radix_experiment(data):
-    results = []
-    # repeatedly generate a fixed number of uniforms with an increasing range, time quicksort/radix, save as csv
-    # on the google keep note you say range of size 5,10,100,200 and 1 million ints, I think that's too small a range
-    # and maybe too many numbers?
+    for i in range(n_times):
+        data = data_generator()
+        start_time = time.time()
+        sort_algo(data)
+        runtime = time.time() - start_time
+        total_time += runtime
+
+    return total_time / n_times
+
+def plot_all_sorts_increasing_data(start=100, stop=10000, step=1000):
+    sort_algorithms = [mergesort, quicksort, radixsort, heapsort, insertionsort]
+    x=[]
+    y={}
+    for sort_algo in sort_algorithms:
+        y[sort_algo.func_name] = []
+
+    for data_size in range(start, stop, step):
+        x.append(data_size)
+        for sort_algo in sort_algorithms:
+            running_time = allsort_experiment_avg_time(sort_algo, lambda: generate_uniforms(data_size, 1, 100))
+            y[sort_algo.func_name].append(running_time)
+
+    merge_plot, = plt.plot(x, y["mergesort"], 'b-', label="mergesort")
+    quick_plot, = plt.plot(x, y["quicksort"], 'r-', label="quicksort")
+    radix_plot, = plt.plot(x, y["radixsort"], 'g-', label="radixsort")
+    heap_plot, = plt.plot(x, y["heapsort"], 'y-', label="heapsort")
+    insertion_plot, = plt.plot(x, y["insertionsort"], 'p-', label="insertionsort")
+
+    plt.title("Different Sorting Algorithms Running Time (averaged over 100) with Increasing Data Size")
+    plt.xlabel("Data Size (# of uniform integers)")
+    plt.ylabel("Running Time (seconds)")
+    plt.legend([merge_plot, quick_plot, radix_plot, heap_plot, insertion_plot], ['mergesort', 'quicksort', 'radixsort', 'heapsort', 'insertionsort'])
+    plt.show()
+
+if __name__ == '__main__':
+    print allsort_experiment_avg_time(radixsort, lambda: generate_uniforms(100, 1, 10))
+    print allsort_experiment_avg_time(quicksort, lambda: generate_uniforms(100, 1, 10))
+    print plot_all_sorts_increasing_data(1000,10000,100)
+

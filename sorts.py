@@ -1,5 +1,6 @@
 import random
 import heapq
+import numpy as np
 
 def identity(x):
     return x
@@ -52,17 +53,43 @@ def merge(a1, a2):
             return out
     return out
 
-def radixsort(a,n,maxLen):
-    # totally copied this from the internet
-    # we can reimplement it later if needed
-    for x in range(maxLen):
-        bins = [[] for i in range(n)]
-        for y in a:
-            bins[(y/10**x)%n].append(y)
-        a=[]
-        for section in bins:
-            a.extend(section)
-    return a
+# def radixsort(a):
+#     # Does not support sorting with negative numbers in the array
+#     n = len(a)
+#     max = np.max(a)
+#
+#     for x in range(max+1):
+#         bins = [[] for i in range(n)]
+#         for y in a:
+#             bins[(y/10**x)%n].append(y)
+#         a=[]
+#         for section in bins:
+#             a.extend(section)
+#     return a
+
+def radixsort(random_list):
+    len_random_list = len(random_list)
+    modulus = 10
+    div = 1
+    while True:
+        # empty array, [[] for i in range(10)]
+        new_list = [[], [], [], [], [], [], [], [], [], []]
+        for value in random_list:
+            least_digit = value % modulus
+            least_digit /= div
+            new_list[least_digit].append(value)
+        modulus = modulus * 10
+        div = div * 10
+
+        if len(new_list[0]) == len_random_list:
+            return new_list[0]
+
+        random_list = []
+        rd_list_append = random_list.append
+        for x in new_list:
+            for y in x:
+                rd_list_append(y)
+
 
 def insertionsort(arr):
     for i in range(len(arr)):
@@ -91,8 +118,10 @@ if __name__ == "__main__":
     print(merge([1,2,3,4], [2, 2, 3, 5]))
     arr = [1, 2, 3]
     print(arr)
-    #print(generate_partialsort(list(range(32)), 17))
     a = [3,2,1,4,5]
-    quicksort(a)
+    a = quicksort(a)
     print(a)
+    print
+
+    print radixsort([1,4,6,4,1,5,7,9,2])
 

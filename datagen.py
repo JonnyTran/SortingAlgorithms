@@ -5,7 +5,7 @@ def generate_normals(n_normals, mu, sigma):
     return list(sigma*np.random.randn(n_normals) + mu)
 
 def generate_uniforms(n_uniforms, a, b):
-    return np.random.random_integers(a, b, (n_uniforms))
+    return list(np.random.random_integers(a, b, (n_uniforms)))
 
 def generate_exponentials(n, _lambda):
     return list(np.random.exponential(scale=1/_lambda, size=(n)))
