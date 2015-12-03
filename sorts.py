@@ -116,12 +116,6 @@ if __name__ == "__main__":
     print(heapsort([3,2,1,4,5]))
     print(mergesort([3,2,1,4,5]))
     print(merge([1,2,3,4], [2, 2, 3, 5]))
-    arr = [1, 2, 3]
-    print(arr)
-    a = [3,2,1,4,5]
-    a = quicksort(a)
-    print(a)
-    print
 
-    print radixsort([1,4,6,4,1,5,7,9,2])
+    print(radixsort([1,4,6,4,1,5,7,49,10,11,42,9,2]))
 
