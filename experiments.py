@@ -57,7 +57,7 @@ def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponent
     plt.legend(bbox_to_anchor=(0.3, 1))
     plt.show()
 
-def plot_radix_vs_quicksort_small_range_data(data_size=10000000):
+def plot_radix_vs_quicksort_small_range_data(data_size=1000000):
     sort_algorithms = [quicksort, radixsort]
 
     x = [int(10**exponent) for exponent in np.arange(9, 2, -0.7)]
@@ -74,7 +74,7 @@ def plot_radix_vs_quicksort_small_range_data(data_size=10000000):
     for sort_algo in sort_algorithms:
         plt.plot(x, y[sort_algo.func_name], marker='.', label=sort_algo.func_name)
 
-    plt.title("Radix vs QuickSort on Increasing Data Range (%d Ints)" % data_size)
+    plt.title("Radix vs QuickSort on Increasing Data Range (size: %d)" % data_size)
     plt.xlabel("Data Range (uniform integers)")
     plt.ylabel("Running Time (seconds)")
     plt.legend(bbox_to_anchor=(1, 0.3))
@@ -88,7 +88,7 @@ def plot_quick_vs_insertion_partially_sorted(data_size=1000000):
         plt.plot(x, y, marker='.', label=sort_algo.func_name)
 
 
-    plt.title("QuickSort vs Insertion Partially Sorted Data (%d Ints)" % data_size)
+    plt.title("QuickSort vs Insertion Partially Sorted Data (size: %d)" % data_size)
     plt.xlabel("Number of swaps")
     plt.ylabel("Running Time (seconds)")
     plt.legend(bbox_to_anchor=(1, 0.3))
@@ -99,7 +99,7 @@ def plot_quicksort_different_data_distribution(data_size=10000, n_times=1000):
     data_distributions = [lambda: generate_uniforms(data_size, 1, 100000),
                           lambda: generate_normals(data_size, 0, 5),
                           lambda: generate_exponentials(data_size, 0.5)]
-    data_distributions_names = ["uniforms", "normals", "exponentials"]
+    data_distributions_names = ["Uniforms", "Normals", "Exponentials"]
 
     y = {}
     for distribution in data_distributions_names:
@@ -112,10 +112,9 @@ def plot_quicksort_different_data_distribution(data_size=10000, n_times=1000):
             y[data_distributions_names[i]].append(running_time)
 
     for distribution in data_distributions_names:
-        # plt.hist(gaussian_numbers, bins=20, histtype='stepfilled', normed=True, color='b', label='Gaussian')
-        plt.hist(y[distribution], bins=200, histtype='step', label=distribution)
+        plt.hist(y[distribution], bins=50, histtype='step', label=distribution)
 
-    plt.title("QuickSort on Different Data Distributions (%d Ints)" % data_size)
+    plt.title("QuickSort on Different Data Distributions (size: %d)" % data_size)
     plt.xlabel("Running Time (seconds)")
     plt.ylabel("Frequency")
     plt.legend()
@@ -124,6 +123,6 @@ def plot_quicksort_different_data_distribution(data_size=10000, n_times=1000):
 
 if __name__ == '__main__':
     # plot_all_sorts_increasing_data()
-    # plot_radix_vs_quicksort_small_range_data()
+    plot_radix_vs_quicksort_small_range_data()
     # plot_quick_vs_insertion_partially_sorted()
-    plot_quicksort_different_data_distribution()
+    # plot_quicksort_different_data_distribution()
