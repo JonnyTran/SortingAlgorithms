@@ -19,9 +19,17 @@ def generate_partialsorts(arr, n_swaps):
     fully_sorted = sorted(arr)
     indices = range(len(fully_sorted))
     swaps = np.random.choice(indices, (n_swaps, 2), replace=False)
+
     yield fully_sorted # First yield a fully sorted array
-    for row in swaps:
+
+    # Create a list of exponentially increasing number, starting from 1 to number of swaps as maximum
+    # This way, we don't need to sort the partially array on every single swap, instead, only on exponentially
+    # increasing swap, thus the reducing number of sorts experiments needed
+    n_swaps_to_sort = [int(2**exponent) for exponent in np.arange(0, 100, 1) if exponent <= np.log2(n_swaps)]
+
+    for i, row in enumerate(swaps):
         l, r = row
         swap(fully_sorted, l, r)
-        yield fully_sorted # then yield an array with 1 more swap than the last array
+        if i in n_swaps_to_sort:
+            yield fully_sorted # then yield an array with n more swap than the last array
 
