@@ -33,7 +33,7 @@ def partialsort_experiment(sort_algo, data_size=100000):
 
     return x,y
 
-def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponents_step=0.1):
+def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponents_step=0.5):
     sort_algorithms = [mergesort, quicksort, radixsort, heapsort]
 
     x = [int(10**exponent) for exponent in np.arange(exponents_stop, exponents_start, -exponents_step)]
@@ -45,7 +45,8 @@ def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponent
     for data_size in x:
         print "Sorting on size:", data_size
         for sort_algo in sort_algorithms:
-            running_time = allsort_experiment_avg_time(sort_algo, lambda: generate_uniforms(data_size, 1, 1000000))
+            print "Sort algorithm:", sort_algo.func_name
+            running_time = allsort_experiment_avg_time(sort_algo, lambda: generate_uniforms(data_size, 1, 1000000), n_times=1)
             y[sort_algo.func_name].append(running_time)
 
     for sort_algo in sort_algorithms:
@@ -57,10 +58,10 @@ def plot_all_sorts_increasing_data(exponents_start=1, exponents_stop=6, exponent
     plt.legend(bbox_to_anchor=(0.3, 1))
     plt.show()
 
-def plot_radix_vs_quicksort_small_range_data(data_size=1000000):
+def plot_radix_vs_quicksort_small_range_data(data_size=100000):
     sort_algorithms = [quicksort, radixsort]
 
-    x = [int(10**exponent) for exponent in np.arange(9, 2, -0.7)]
+    x = [int(10**exponent) for exponent in np.arange(8, 2, -0.7)]
     y = {}
     for sort_algo in sort_algorithms:
         y[sort_algo.func_name] = []

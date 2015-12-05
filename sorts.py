@@ -73,7 +73,8 @@ def radixsort(random_list):
     div = 1
     while True:
         # empty array, [[] for i in range(10)]
-        new_list = [[], [], [], [], [], [], [], [], [], []]
+        # new_list = [[], [], [], [], [], [], [], [], [], []]
+        new_list = [[] for i in range(np.max(random_list))]
         for value in random_list:
             least_digit = value % modulus
             least_digit /= div
